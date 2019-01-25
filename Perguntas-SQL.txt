@@ -1,0 +1,46 @@
+/* Pergunta 1 - Qual os 5 clientes que menos gerou lucro ? *\
+Select (FirstName || ' ' || LastName) as Cliente,  (BillingCountry || ' - ' || BillingCity) as País_Cidade, sum(Total) as TOTAL_PAISES
+FROM Invoice
+Join Customer
+On Invoice.CustomerId = Customer.CustomerId
+Group by BillingCity
+Order by TOTAL_PAISES
+Limit 5
+
+/* Pergunta 2 - Qual o empregador que mais gerou lucro ? *\
+SELECT  Employee.EmployeeId, (Employee.FirstName || ' ' || Employee.LastName) as Employee, Employee.Country,SUM(Invoice.Total) AS TOTAL
+FROM Employee
+JOIN Customer
+ON Employee.EmployeeId = Customer.SupportRepId
+JOIN Invoice
+ON Customer.CustomerId = Invoice.CustomerId
+GROUP BY Employee.EmployeeId
+ORDER BY TOTAL DESC
+
+/* Pergunta 3 - Qual a playlist com mais musicas compradas ? E qual a playlist que mais gerou lucro e a que menos gerou lucro ? *\
+SELECT Playlist.Name, Count (PlaylistTrack.PlaylistId) as Qtd_musicas_compradas, sum (Invoice.Total) as Lucro
+FROM Playlist
+JOIN PlaylistTrack
+ON Playlist.PlaylistId = PlaylistTrack.PlaylistId
+JOIN Track
+ON PlaylistTrack.TrackId = Track.TrackId
+JOIN InvoiceLine
+ON Track.TrackId = InvoiceLine.TrackId
+JOIN Invoice
+ON InvoiceLine.InvoiceId = Invoice.InvoiceId
+GROUP BY Playlist.Name
+ORDER BY Lucro DESC
+
+/* Pergunta 4 - Qual os 10 artistas que possuem mais musicas disponiveis para compra ? E quais seus generos ?*\
+SELECT Genre.Name as Gênero, Artist.Name as Nome, COUNT (TrackID) as Musicas 
+FROM Artist
+JOIN Album
+ON Artist.ArtistId = Album.ArtistId
+JOIN Track
+ON Album.AlbumId = Track.AlbumId
+JOIN Genre
+ON Track.GenreId = Genre.GenreId
+GROUP BY Artist.Name
+ORDER BY Musicas DESC
+LIMIT 10
+
